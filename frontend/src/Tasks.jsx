@@ -7,6 +7,7 @@ function Tasks() {
   const [title, setTitle] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
 
+  // Fetch tasks and users only once on mount
   useEffect(() => {
     api
       .get("/tasks")
@@ -38,13 +39,19 @@ function Tasks() {
     }
   };
 
-  console.log(tasks);
+  const handleDelete = async (taskId) => {
+    try {
+      await api.delete(`/tasks/${taskId}`);
+      setTasks((prev) => prev.filter((t) => t.id !== taskId));
+    } catch (err) {
+      console.error("Failed to delete task:", err);
+    }
+  };
 
   return (
     <div>
       <h2>Tasks</h2>
 
-      {/* Input Section */}
       <div style={{ marginBottom: 20 }}>
         <select
           value={selectedUser}
@@ -91,16 +98,19 @@ function Tasks() {
               type="checkbox"
               checked={task.isDone}
               onChange={async () => {
-                try {
-                  setTasks((prev) =>
-                    prev.map((t) =>
-                      t.id === task.id ? { ...t, isDone: !t.isDone } : t
-                    )
-                  );
+                const newStatus = !task.isDone;
 
+                setTasks((prev) =>
+                  prev.map((t) =>
+                    t.id === task.id ? { ...t, isDone: newStatus } : t
+                  )
+                );
+
+                try {
                   await api.put(`/tasks/${task.id}`, {
-                    ...task,
-                    isDone: !task.isDone, // new value
+                    title: task.title,
+                    userId: task.userId,
+                    isDone: newStatus,
                   });
                 } catch (err) {
                   console.error(err);
@@ -116,6 +126,8 @@ function Tasks() {
             <span>{task.user?.email}</span>
             <span>{task.title}</span>
             <span>{task.isDone ? "✅" : "❌"}</span>
+
+            <button onClick={() => handleDelete(task.id)}>Delete</button>
           </li>
         ))}
       </ul>
