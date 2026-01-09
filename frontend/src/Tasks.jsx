@@ -29,6 +29,7 @@ function Tasks() {
               gap: 10,
             }}
           >
+            <input type="checkbox" />
             <span>{task.user.email}</span>
             <span>{task.title}</span>
             <span>{task.isDone ? "✅" : "❌"}</span>
