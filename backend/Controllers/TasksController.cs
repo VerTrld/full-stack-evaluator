@@ -26,14 +26,27 @@ namespace TaskManager.API
             return Ok(tasks);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] TaskItem task)
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] TaskItem task)
+    {
+        var user = await _context.Users.FindAsync(task.UserId);
+        if (user == null) return BadRequest("Invalid UserId");
+
+        task.User = user; 
+        _context.Tasks.Add(task);
+        await _context.SaveChangesAsync();
+
+        var result = new TaskItem
         {
-            
-            _context.Tasks.Add(task);
-            await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(Get), new { id = task.Id }, task);
-        }
+            Id = task.Id,
+            Title = task.Title,
+            IsDone = task.IsDone,
+            UserId = task.UserId
+        };
+
+        return CreatedAtAction(nameof(Get), new { id = task.Id }, result);
+    }
+
 
         [HttpPut("{id}")] 
         public async Task<IActionResult> Update(int id, [FromBody] TaskItem updated)
