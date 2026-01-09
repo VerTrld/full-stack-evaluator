@@ -11,13 +11,27 @@ function Tasks() {
       .catch((err) => console.error(err));
   }, []);
 
+  console.log(tasks);
+
   return (
     <div>
       <h2>Tasks</h2>
       <ul>
         {tasks.map((task) => (
-          <li key={task.id}>
-            {task.title} {task.isDone ? "✅" : "❌"}
+          <li
+            key={task.id}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+              gap: 10,
+            }}
+          >
+            <span>{task.user.email}</span>
+            <span>{task.title}</span>
+            <span>{task.isDone ? "✅" : "❌"}</span>
           </li>
         ))}
       </ul>
