@@ -18,13 +18,28 @@ namespace TaskManager.API
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            
-            var tasks = await _context.Tasks.ToListAsync();
-            return Ok(tasks);
-        }
+    [HttpGet]
+    public async Task<IActionResult> Get()
+    {
+        var tasks = await _context.Tasks
+            .Include(t => t.User)
+            .Select(t => new
+            {
+                t.Id,
+                t.Title,
+                t.IsDone,
+                t.UserId,
+                User = new
+                {
+                    t.User.Id,
+                    t.User.Email
+                }
+            })
+            .ToListAsync();
+
+        return Ok(tasks);
+    }
+
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] TaskItem task)
@@ -41,7 +56,7 @@ namespace TaskManager.API
             Id = task.Id,
             Title = task.Title,
             IsDone = task.IsDone,
-            UserId = task.UserId
+            UserId = task.UserId,
         };
 
         return CreatedAtAction(nameof(Get), new { id = task.Id }, result);
