@@ -19,7 +19,16 @@ namespace TaskManager.API
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var users = await _context.Users.Include(u => u.Tasks).ToListAsync();
+           var users = await _context.Users
+            .Include(u => u.Tasks)
+            .Select(u => new 
+            {
+                u.Id,
+                u.Email,
+                Tasks = u.Tasks.Select(t => new { t.Id, t.Title, t.IsDone }).ToList()
+            })
+            .ToListAsync();
+
             return Ok(users);
         }
 
