@@ -2,6 +2,7 @@
 
 ⏰ **Estimated Time**: 1-2 hours  
 🔧 **Tech Stack**:
+
 - [React 18+](https://reactjs.org/)
 - [Vite](https://vitejs.dev/)
 - [Axios](https://axios-http.com/)
@@ -10,12 +11,11 @@
 ## 🎯 Objectives
 
 - ✅ Connect to a RESTful API (with some "quirks") – see: [.NET Task Evaluator API](https://github.com/phia-digiteer/dotnet-task-evaluator)
-- 🛠️ Implement features with partial or ambiguous requirements  
-- ⚠️ Identify places where API usage is unsafe or incomplete  
-- 🧠 Show thought process via commits, comments, or UI choices  
-- 📦 Handle API failures gracefully  
+- 🛠️ Implement features with partial or ambiguous requirements
+- ⚠️ Identify places where API usage is unsafe or incomplete
+- 🧠 Show thought process via commits, comments, or UI choices
+- 📦 Handle API failures gracefully
 - 🚀 Add features you think are missing or underexplored
-
 
 ### 📦 Guidelines
 
